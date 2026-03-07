@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emotion Cipher – Emotion Aware Encryption</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
+</head>
+<body class="bg-gradient">
+    <div class="container">
+        <div class="row justify-content-center min-vh-100 align-items-center">
+            <div class="col-lg-8 col-md-10">
+                <!-- Main Card -->
+                <div class="card shadow-lg border-0 main-card">
+                    <div class="card-header bg-primary text-white text-center py-3">
+                        <h1 class="h3 mb-0">
+                            <i class="bi bi-shield-lock-fill me-2"></i>
+                            Emotion Cipher
+                        </h1>
+                        <p class="mb-0 small">Emotion Aware Encryption</p>
+                    </div>
+                    
+                    <div class="card-body p-4">
+                        <!-- Input Section -->
+                        <div class="mb-4">
+                            <label for="messageInput" class="form-label fw-bold">
+                                <i class="bi bi-chat-text me-2"></i>Enter Your Message
+                            </label>
+                            <textarea 
+                                class="form-control" 
+                                id="messageInput" 
+                                rows="4" 
+                                placeholder="Type your message here..."
+                            ></textarea>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="d-grid gap-2 mb-4">
+                            <button class="btn btn-success btn-lg" id="encryptBtn">
+                                <i class="bi bi-lock-fill me-2"></i>Encrypt Message
+                            </button>
+                            <button class="btn btn-warning btn-lg" id="decryptBtn">
+                                <i class="bi bi-unlock-fill me-2"></i>Decrypt Message
+                            </button>
+                        </div>
+
+                        <!-- Loading Indicator -->
+                        <div class="text-center mb-3" id="loadingIndicator" style="display: none;">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Processing...</span>
+                            </div>
+                            <p class="mt-2 mb-0">Processing...</p>
+                        </div>
+
+                        <!-- Results Section -->
+                        <div id="resultsSection" style="display: none;">
+                            <!-- Encrypted Text -->
+                            <div class="card mb-3">
+                                <div class="card-header bg-secondary text-white">
+                                    <i class="bi bi-shield-check me-2"></i>Encrypted Text
+                                </div>
+                                <div class="card-body">
+                                    <div class="input-group">
+                                        <input 
+                                            type="text" 
+                                            class="form-control" 
+                                            id="encryptedText" 
+                                            readonly
+                                        >
+                                        <button class="btn btn-outline-primary" id="copyEncryptedBtn">
+                                            <i class="bi bi-clipboard"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Detected Emotion -->
+                            <div class="card mb-3">
+                                <div class="card-header bg-info text-white">
+                                    <i class="bi bi-emoji-smile me-2"></i>Detected Emotion
+                                </div>
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center">
+                                        <span class="emotion-badge" id="emotionBadge">
+                                            <i class="bi bi-emoji-neutral me-2"></i>
+                                            <span id="detectedEmotion">-</span>
+                                        </span>
+                                        <small class="text-muted ms-3" id="emotionKey">
+                                            Key: -
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Decrypted Text -->
+                            <div class="card mb-3">
+                                <div class="card-header bg-success text-white">
+                                    <i class="bi bi-file-text me-2"></i>Decrypted Text
+                                </div>
+                                <div class="card-body">
+                                    <textarea 
+                                        class="form-control" 
+                                        id="decryptedText" 
+                                        rows="3" 
+                                        readonly
+                                    ></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Error Alert -->
+                        <div class="alert alert-danger" id="errorAlert" style="display: none;">
+                            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                            <span id="errorMessage"></span>
+                        </div>
+
+                        <!-- Success Alert -->
+                        <div class="alert alert-success" id="successAlert" style="display: none;">
+                            <i class="bi bi-check-circle-fill me-2"></i>
+                            <span id="successMessage"></span>
+                        </div>
+                    </div>
+
+                    <!-- Card Footer -->
+                    <div class="card-footer bg-light text-center py-2">
+                        <small class="text-muted">
+                            <i class="bi bi-info-circle me-1"></i>
+                            Messages are encrypted with emotion-aware keys
+                        </small>
+                    </div>
+                </div>
+
+                <!-- Info Cards -->
+                <div class="row mt-4">
+                    <div class="col-md-4 mb-3">
+                        <div class="card h-100 border-primary">
+                            <div class="card-body text-center">
+                                <i class="bi bi-robot text-primary fs-1 mb-2"></i>
+                                <h6 class="card-title">AI Powered</h6>
+                                <p class="card-text small text-muted">
+                                    Uses advanced emotion detection AI to analyze your messages
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <div class="card h-100 border-success">
+                            <div class="card-body text-center">
+                                <i class="bi bi-shield-lock text-success fs-1 mb-2"></i>
+                                <h6 class="card-title">Secure Encryption</h6>
+                                <p class="card-text small text-muted">
+                                    Each emotion creates a unique encryption key for security
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <div class="card h-100 border-warning">
+                            <div class="card-body text-center">
+                                <i class="bi bi-arrow-repeat text-warning fs-1 mb-2"></i>
+                                <h6 class="card-title">Easy Decryption</h6>
+                                <p class="card-text small text-muted">
+                                    Decrypt messages back to their original form instantly
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

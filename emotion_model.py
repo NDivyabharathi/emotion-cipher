@@ -5,19 +5,9 @@ import re
 class EmotionDetector:
     def __init__(self):
         """Initialize the emotion detection model"""
-        try:
-            # Use a smaller, faster model for quick startup
-            self.classifier = pipeline(
-                "text-classification",
-                model="cardiffnlp/twitter-roberta-base-emotion",
-                return_all_scores=True,
-                device=0 if torch.cuda.is_available() else -1
-            )
-            print("Emotion model loaded successfully!")
-        except Exception as e:
-            print(f"Error loading model: {e}")
-            print("Using keyword-based emotion detection as fallback")
-            self.classifier = None
+        # For Render deployment, use keyword-only detection to avoid memory issues
+        self.classifier = None
+        print("Using keyword-based emotion detection for deployment")
     
     def detect_emotion_with_confidence(self, text):
         """
@@ -32,35 +22,11 @@ class EmotionDetector:
         if not text or not text.strip():
             return "neutral", 0.5
         
-        # Try AI model first if available
-        if self.classifier:
-            try:
-                results = self.classifier(text)[0]
-                best_result = max(results, key=lambda x: x['score'])
-                emotion = best_result['label'].lower()
-                confidence = best_result['score']
-                
-                # Map to our standard emotions
-                emotion_mapping = {
-                    'joy': 'joy', 'happiness': 'joy', 'happy': 'joy', 'love': 'joy',
-                    'sadness': 'sadness', 'sad': 'sadness', 'disappointment': 'sadness',
-                    'anger': 'anger', 'angry': 'anger', 'annoyance': 'anger', 'fury': 'anger',
-                    'fear': 'fear', 'scared': 'fear', 'anxiety': 'fear', 'nervous': 'fear',
-                    'surprise': 'surprise', 'surprised': 'surprise', 'shock': 'surprise',
-                    'enthusiasm': 'joy', 'excitement': 'joy', 'pride': 'joy',
-                    'disgust': 'anger', 'contempt': 'anger',
-                    'neutral': 'neutral', 'calm': 'neutral', 'relaxed': 'neutral'
-                }
-                
-                mapped_emotion = emotion_mapping.get(emotion, self._infer_emotion_from_keywords(text))
-                return mapped_emotion, confidence
-                
-            except Exception as e:
-                print(f"AI model error: {e}")
-        
-        # Fallback to keyword detection
+        # Use keyword-based detection for deployment
         emotion = self._infer_emotion_from_keywords(text)
-        return emotion, 0.8 if emotion != 'neutral' else 0.6
+        confidence = 0.8 if emotion != 'neutral' else 0.6
+        
+        return emotion, confidence
     
     def _infer_emotion_from_keywords(self, text):
         """Keyword-based emotion detection"""

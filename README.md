@@ -190,8 +190,3 @@ This project is for educational and demonstration purposes.
 
 Feel free to submit issues and enhancement requests!
 
-## Demo Video
-
-I have explained what this project is and how it works in the video. Please watch it.
-
-https://drive.google.com/drive/folders/1rn2QjLhaYoiHSF61pReFSgCpLGcAJVse?usp=sharing
